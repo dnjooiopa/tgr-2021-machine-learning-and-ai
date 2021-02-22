@@ -43,28 +43,34 @@ if __name__ == "__main__":
     fps = cap.get(cv2.CAP_PROP_FPS)
     width = int( cap.get(cv2.CAP_PROP_FRAME_WIDTH) )
     height = int( cap.get(cv2.CAP_PROP_FRAME_HEIGHT) )
-    sqsize = max(width,height)
+    #sqsize = max(width,height)
+
+    new_width = 320
+    new_height = int(height * (new_width / width))
+    sqsize = 320
     count  = 0
+    print(width, height)
     while True:
         # capture image
-        ret,raw_img = cap.read()
+        ret, raw_img = cap.read()
+        raw_img = cv2.resize(raw_img, (new_width, new_height))
         if not ret:
             break
         # add margin
         frame = np.zeros((sqsize,sqsize,3), np.uint8)
-        if width > height:
-            offset = int( (width - height)/2 )
-            frame[offset:height+offset,:] = raw_img
+        if new_width > new_height:
+            offset = int( (new_width - new_height)/2 )
+            frame[offset:new_height+offset,:] = raw_img
         else:
-            offset = int( (height - width)/2 )
+            offset = int( (new_height - new_width)/2 )
             frame[:,offset:] = raw_img
-        # 
-        if count == 10:
+        img = frame
+        if count == 5:
             start_time = time.time()
             classes, bboxes, scores = detect_objects(frame)
             end_time = time.time()
             elapsed_time = end_time - start_time
-            print('elapsed_time (tf):', elapsed_time)
+            #print('elapsed_time (tf):', elapsed_time)
             img = overlay_objects(frame, bboxes, classes, scores)
             count = 0
             # overlay with line
@@ -76,9 +82,10 @@ if __name__ == "__main__":
             cv2.line(img, pt1, pt2, (0,0,255), 2)        
             # preview image
             cv2.imshow('Preview', img)
-            # delay_time = int(1000/fps)     
-        key = cv2.waitKey(1)
+            count = 0
+        # delay_time = int(1000/fps)     
         count = count + 1
+        key = cv2.waitKey(1)
         if key == ord('q'):
             break
     cap.release()
