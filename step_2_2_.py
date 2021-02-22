@@ -6,7 +6,7 @@ from step_2_2_problem import *
 
 
 if __name__ == '__main__':
-    cap = cv2.VideoCapture('data/clips/Copy of L1_trainSet.h264')
+    cap = cv2.VideoCapture('data/clips/test_clip.h264')
     fps = cap.get(cv2.CAP_PROP_FPS)
     width = int( cap.get(cv2.CAP_PROP_FRAME_WIDTH) )
     height = int( cap.get(cv2.CAP_PROP_FRAME_HEIGHT) )
