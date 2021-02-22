@@ -139,3 +139,5 @@ cython_debug/
 
 *.pdf
 *.ipynb
+labelImg
+*.h264
