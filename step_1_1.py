@@ -4,17 +4,17 @@ import os
 
 if __name__ == '__main__':
     # 1 scan clips
-    CLIP_PATH = './data/clips'
+    CLIP_PATH = './data/clips/'
     flist = os.listdir(CLIP_PATH)
     clips = []
     for f in flist:
-        if f.endwith('.h264'):
+        if f.endswith('.h264'):
             clips.append(CLIP_PATH + f)
     print(clips)
     # 2 preview and capture images
     idx = 0
     running = True
-    IMG_PATH = './data/clips'
+    IMG_PATH = './data/images/'
     for clip in clips:
         # 2.1 import clip
         print("Reading", clip)
@@ -33,4 +33,25 @@ if __name__ == '__main__':
             if not ret:
                 break
             frame = np.zeros((sqsize, sqsize, 3), np.uint8)
+            if width > height:
+                offset = int((width - height)/2)
+                frame[offset:height+offset,:] = raw_img
+            else:
+                offset = int((height - width)/2)
+                frame[:,offset:] = raw_img
+            # 2.2.2 preview image
+            cv2.imshow('Preview', frame)
+            key = cv2.waitKey(int(1000/fps))
             if key == ord('n'): 
+                break
+            if key == ord('q'):
+                running = False
+                break
+            if key == 32:
+                fname = IMG_PATH + 'lime' + f'{idx:03}' + '.jpg'
+                print('Saving to ' + fname)
+                cv2.imwrite(fname, frame)
+                idx = idx + 1
+        cap.release()
+        if running is False:
+            break
