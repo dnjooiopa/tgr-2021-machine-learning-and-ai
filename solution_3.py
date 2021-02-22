@@ -74,11 +74,11 @@ if __name__ == "__main__":
             img = overlay_objects(frame, bboxes, classes, scores)
             count = 0
             # overlay with line
-            pt1 = ( int(sqsize/2-100), 0 )
-            pt2 = ( int(sqsize/2-100), int(sqsize) )
+            pt1 = ( int(sqsize/2-50), 0 )
+            pt2 = ( int(sqsize/2-50), int(sqsize) )
             cv2.line(img, pt1, pt2, (0,0,255), 2)
-            pt1 = ( int(sqsize/2+100), 0 )
-            pt2 = ( int(sqsize/2+100), int(sqsize) )
+            pt1 = ( int(sqsize/2+50), 0 )
+            pt2 = ( int(sqsize/2+50), int(sqsize) )
             cv2.line(img, pt1, pt2, (0,0,255), 2)        
             # preview image
             cv2.imshow('Preview', img)
