@@ -142,3 +142,4 @@ cython_debug/
 labelImg
 *.h264
 *.jpg
+*.xml
