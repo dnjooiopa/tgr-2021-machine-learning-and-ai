@@ -12,9 +12,11 @@ if __name__ == '__main__':
             clips.append(CLIP_PATH + f)
     print(clips)
     # 2 preview and capture images
-    idx = 0
-    running = True
     IMG_PATH = './data/images/'
+    idx = len([x for x in os.listdir(IMG_PATH) if x.endswith(".jpg")]) 
+    print(idx)
+    running = True
+   
     for clip in clips:
         # 2.1 import clip
         print("Reading", clip)
