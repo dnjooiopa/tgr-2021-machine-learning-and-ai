@@ -144,3 +144,7 @@ labelImg
 *.jpg
 *.xml
 *.mp4
+protoc
+models
+output
+.vscode

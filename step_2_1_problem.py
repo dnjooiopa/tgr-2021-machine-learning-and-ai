@@ -41,5 +41,5 @@ for img_file in glob.glob('data/images/*.jpg'):
     bboxes = results['detection_boxes'][0].numpy()
     classes = results['detection_classes'][0].numpy().astype(np.uint32) + 1
     scores = results['detection_scores'][0].numpy()
-    print(img_file, classes[scores > 0.8], bboxes[scores > 0.8])
+    print(img_file, classscoreses[ > 0.8], bboxes[scores > 0.8])
 print(elapsed_time)
