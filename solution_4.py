@@ -53,7 +53,15 @@ if __name__ == "__main__":
     new_height = int(height * (new_width / width))
     sqsize = 320
     count  = 0
-    print(width, height)
+    print("Frame size (w x h):",width, height)
+
+    limes = []
+
+    isEntry = False
+
+    marker_radius_sum = 0
+    marker_radius_avg = 0
+
     while True:
         # capture image
         ret, raw_img = cap.read()
@@ -89,16 +97,33 @@ if __name__ == "__main__":
 
             # count if obj have passed the line
             for box in bboxes:
+                xmin = box[1]
+                xmax = box[3]
+                radius = (box[3] - box[1]) * 320
+
+                if isEntry is False and int(xmin * 320) > int(sqsize/2-margin) and int(xmin * 320):
+                    isEntry = True
                 
-                if int(box[1] * 320) > int(sqsize/2-margin) and int(box[1] * 320) < int(sqsize/2+margin) and int(box[3] * 320) > int(sqsize/2-margin) and int(box[3] * 320) < int(sqsize/2+margin) :
+                if isEntry and int(xmax * 320) > int(sqsize/2-margin) and int(xmax * 320) < int(sqsize/2+margin):
+                    isEntry = False
                     if classes[0] == 1:
                         lime_count = lime_count + 1
+                        lime_size = (radius / marker_radius_avg) * 40
+                        lime_size = round(lime_size, 2)
+                        limes.append(lime_size)
+                        print("lime count:", lime_count, ", size:", lime_size, "mm.")
                     if classes[0] == 2:
                         marker_count = marker_count + 1
-                    print('Lime:', lime_count)
-                    print('Marker:', marker_count)
+                        marker_radius_sum = marker_radius_sum + radius
+                        marker_radius_avg = marker_radius_sum / marker_count
+                        print("marker count:", marker_count)
+                
+                    if int(xmax * 320) < int(sqsize/2-margin): # reset counter
+                        isEntry = False
+
 
             # preview image
+            img = cv2.resize(img, (width, width))
             cv2.imshow('Preview', img)
             count = 0
 
@@ -107,6 +132,13 @@ if __name__ == "__main__":
         key = cv2.waitKey(1)
         if key == ord('q'):
             break
+        if key == 32:
+            print("****************************")
+            print("marker counts:", marker_count)
+            print("lime counts:", lime_count)
+            print("marker avg radius (xmax - xmin):", marker_radius_avg)
+            print("****************************")
+        
     cap.release()
     #print_result()
 
